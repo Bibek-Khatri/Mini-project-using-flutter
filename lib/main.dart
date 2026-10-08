@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:miniflutterproject/pages/dasboard.dart';
+import 'package:miniflutterproject/pages/dashboard.dart';
 
 void main() {
   runApp(const MyApp());
