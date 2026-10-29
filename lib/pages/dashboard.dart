@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:miniflutterproject/pages/detailpage.dart';
-import 'package:flutter/material.dart';
 import 'package:miniflutterproject/controller/apicall.dart';
+
+import '../model/News.dart';
+
 
 class dashboard extends StatefulWidget {
   const dashboard({super.key});
+
 
   @override
   State<dashboard> createState() => dashboardState();
 }
 
 class dashboardState extends State<dashboard> {
+  get reponse => null;
+
 
   horizontalitem(size, String title, url, date){
     return GestureDetector(
@@ -136,12 +141,16 @@ class dashboardState extends State<dashboard> {
       ),
     );
   }
+  Future<news?>? futurenewsdata;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    Apicall.getnewsapidata();
+    Apicall.getnewsapidata(reponse);  
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -154,28 +163,48 @@ class dashboardState extends State<dashboard> {
       body: Container(
         child: Column(
           children: [
+            FutureBuilder(future: futurenewsdata,
+                builder: (context, AsyncSnapshot<news?> snapshot){
+              switch(snapshot.connectionState){
+                case ConnectionState.none:
+                case ConnectionState.waiting:
+                  return Center(child: CircularProgressIndicator(),);
+                case ConnectionState.active:
+                case ConnectionState.done:
+                  if (snapshot.hasData){
+                    var data= snapshot.data;
+                    return Column(
+                      children: [Container(
+                        height: size.height/4.5,
+                        child: ListView.builder(
+                            padding:  EdgeInsets.zero,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: data!.articles!.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return horizontalitem(size,
+                              data.articles![index].title!,
+                              data.articles![index].urlToImage,
+                              data.articles![index].publishedAt,
+                              );
+
+                            }
+                        ),
+                      ),],
+                    );
+                  }else{
+                    return Center(child: Text("No Data"),);
+
+                  }
+
+              }
+
+                }
+                   ),
+
+
 
             //horizontal list data
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  // horizontalitem(size, String title, url, date){
-                  horizontalitem(size,
-                      "Happy Dashain",
-                      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjZEcP2NkJQgEzAbBaG49jkD5TOG9hI9VALB1a_-vXlQ&s=10",
-                      "05, FEB 2026"),
-                  horizontalitem(size,
-                      "Happy tihar",
-                      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjZEcP2NkJQgEzAbBaG49jkD5TOG9hI9VALB1a_-vXlQ&s=10",
-                      "02, FEB 2026"),
-                  horizontalitem(size,
-                      "Happy chatt",
-                      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjZEcP2NkJQgEzAbBaG49jkD5TOG9hI9VALB1a_-vXlQ&s=10",
-                      "09, FEB 2026"),
-                ],
-              ),
-            ),
+
 
             //vertical list data
             Container(

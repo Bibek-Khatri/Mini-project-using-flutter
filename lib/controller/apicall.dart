@@ -10,7 +10,7 @@ class Apicall {
   // &sortBy=publishedAt
   // &apiKey=55c38aa5e5b34e72895908bfe55f6342
 
-   static getnewsapidata(dynamic reponse)async{
+   static Future<news?>?getnewsapidata(dynamic reponse)async{
     try{
       var url = Uri.http(Static.baseurl, Static.path,{
 
