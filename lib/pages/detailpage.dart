@@ -3,6 +3,7 @@ import '../controller/apicall.dart';
 import '../model/news.dart';
 import 'dashboard.dart';
 import '../core/static.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:smart_date_formatter/smart_date_formatter.dart';
 class detailpage extends StatefulWidget {
   detailpage({super.key});
@@ -54,10 +55,17 @@ class detailpageState extends State<detailpage> {
                 ),
                 Positioned(
                   right: 5,
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Icon(Icons.share,
-                      color: Colors.white,size: 40,),
+                  child: GestureDetector(
+                    onTap: (){
+                      SharePlus.instance.share(
+                          ShareParams(text: 'check out my website https://example.com')
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Icon(Icons.share,
+                        color: Colors.white,size: 40,),
+                    ),
                   ),
                 ),
                 Container(
