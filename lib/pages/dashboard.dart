@@ -1,21 +1,16 @@
-import 'package:flutter/material.dart';
-import 'package:miniflutterproject/pages/detailpage.dart';
 import 'package:miniflutterproject/controller/apicall.dart';
-
-import '../model/News.dart';
-
+import 'package:miniflutterproject/model/news.dart';
+import 'package:miniflutterproject/pages/detailpage.dart';
+import 'package:flutter/material.dart';
 
 class dashboard extends StatefulWidget {
   const dashboard({super.key});
-
 
   @override
   State<dashboard> createState() => dashboardState();
 }
 
 class dashboardState extends State<dashboard> {
-  get reponse => null;
-
 
   horizontalitem(size, String title, url, date){
     return GestureDetector(
@@ -141,17 +136,13 @@ class dashboardState extends State<dashboard> {
       ),
     );
   }
-  Future<news?>? futurenewsdata;
 
+  Future<news?>? futurenewsdata;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    Apicall.getnewsapidata(reponse);  
+    futurenewsdata = Apicall.getnewsapidata();
   }
-
-
-
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -163,76 +154,63 @@ class dashboardState extends State<dashboard> {
       body: Container(
         child: Column(
           children: [
-            FutureBuilder(future: futurenewsdata,
+            FutureBuilder(
+                future: futurenewsdata,
                 builder: (context, AsyncSnapshot<news?> snapshot){
-              switch(snapshot.connectionState){
-                case ConnectionState.none:
-                case ConnectionState.waiting:
-                  return Center(child: CircularProgressIndicator(),);
-                case ConnectionState.active:
-                case ConnectionState.done:
-                  if (snapshot.hasData){
-                    var data= snapshot.data;
-                    return Column(
-                      children: [Container(
-                        height: size.height/4.5,
-                        child: ListView.builder(
-                            padding:  EdgeInsets.zero,
-                            scrollDirection: Axis.horizontal,
-                            itemCount: data!.articles!.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return horizontalitem(size,
-                              data.articles![index].title!,
-                              data.articles![index].urlToImage,
-                              data.articles![index].publishedAt,
-                              );
+                  switch (snapshot.connectionState){
+                    case ConnectionState.none:
+                    case ConnectionState.waiting:
+                      return Center(child: CircularProgressIndicator(),);
+                    case ConnectionState.active:
+                    case ConnectionState.done:
+                      if(snapshot.hasData){
+                        //ui
+                        var data = snapshot.data;
+                        return Column(
+                          children: [
+                            Container(
+                              height: size.height/4.5,
+                              child: ListView.builder(
+                                  padding: EdgeInsets.zero,
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: data!.articles!.length,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    return horizontalitem(size,
+                                        data.articles![index].title!,
+                                        data.articles![index].urlToImage,
+                                        data.articles![index].publishedAt);
+                                  }
+                              ),
+                            ),
+                            Container(
+                              height: size.height/1.65,
+                              child: ListView.builder(
+                                  padding: EdgeInsets.zero,
+                                  scrollDirection: Axis.vertical,
+                                  itemCount: data.articles!.length,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    return verticalllistitem(size,
+                                        data.articles![index].title!,
+                                        data.articles![index].urlToImage,
+                                        data.articles![index].publishedAt!.split("T")[0],
+                                        data.articles![index].source!.name!
+                                    );
+                                  }
+                              ),
+                            ),
 
-                            }
-                        ),
-                      ),],
-                    );
-                  }else{
-                    return Center(child: Text("No Data"),);
-
+                          ],
+                        );
+                      }else{
+                        return Center(child: Text("No Data"),);
+                      }
                   }
-
-              }
-
-                }
-                   ),
+                }),
 
 
 
-            //horizontal list data
 
 
-            //vertical list data
-            Container(
-              height: size.height/1.65,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    verticalllistitem(size,
-                        "PCPS DASHAIN FEST",
-                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjZEcP2NkJQgEzAbBaG49jkD5TOG9hI9VALB1a_-vXlQ&s=10",
-                        "02 FEB 2026", "PCPS NEWS"),
-                    verticalllistitem(size,
-                        "PCPS DASHAIN FEST",
-                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjZEcP2NkJQgEzAbBaG49jkD5TOG9hI9VALB1a_-vXlQ&s=10",
-                        "02 FEB 2026", "PCPS NEWS"),
-                    verticalllistitem(size,
-                        "PCPS DASHAIN FEST",
-                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjZEcP2NkJQgEzAbBaG49jkD5TOG9hI9VALB1a_-vXlQ&s=10",
-                        "02 FEB 2026", "PCPS NEWS"),
-                    verticalllistitem(size,
-                        "PCPS DASHAIN FEST",
-                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjZEcP2NkJQgEzAbBaG49jkD5TOG9hI9VALB1a_-vXlQ&s=10",
-                        "02 FEB 2026", "PCPS NEWS")
-
-                  ],
-                ),
-              ),
-            )
 
           ],
         ),

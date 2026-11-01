@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../controller/apicall.dart';
+import '../model/news.dart';
 import 'dashboard.dart';
 
 class detailpage extends StatefulWidget {
@@ -10,6 +12,12 @@ class detailpage extends StatefulWidget {
 
 class detailpageState extends State<detailpage> {
 
+  Future<news?>? futurenewsdata;
+  @override
+  void initState() {
+    super.initState();
+    futurenewsdata = Apicall.getnewsapidata();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,23 +101,48 @@ class detailpageState extends State<detailpage> {
               child: Text("Related Videos", style: TextStyle(fontSize: 18),),
             ),
 
+            FutureBuilder(
+                future: futurenewsdata,
+                builder: (context, AsyncSnapshot<news?> snapshot){
+                  switch (snapshot.connectionState){
+                    case ConnectionState.none:
+                    case ConnectionState.waiting:
+                      return Center(child: CircularProgressIndicator(),);
+                    case ConnectionState.active:
+                    case ConnectionState.done:
+                      if(snapshot.hasData){
+                        //ui
+                        var data = snapshot.data;
+                        return Column(
+                          children: [
 
-            dashboardState.verticalllistitem(size,
-                "PCPS DASHAIN FEST",
-                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjZEcP2NkJQgEzAbBaG49jkD5TOG9hI9VALB1a_-vXlQ&s=10",
-                "02 FEB 2026", "PCPS NEWS"),
-            dashboardState.verticalllistitem(size,
-                "PCPS DASHAIN FEST",
-                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjZEcP2NkJQgEzAbBaG49jkD5TOG9hI9VALB1a_-vXlQ&s=10",
-                "02 FEB 2026", "PCPS NEWS"),
-            dashboardState.verticalllistitem(size,
-                "PCPS DASHAIN FEST",
-                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjZEcP2NkJQgEzAbBaG49jkD5TOG9hI9VALB1a_-vXlQ&s=10",
-                "02 FEB 2026", "PCPS NEWS"),
-            dashboardState.verticalllistitem(size,
-                "PCPS DASHAIN FEST",
-                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjZEcP2NkJQgEzAbBaG49jkD5TOG9hI9VALB1a_-vXlQ&s=10",
-                "02 FEB 2026", "PCPS NEWS"),
+                            Container(
+                              height: size.height/1.65,
+                              child: ListView.builder(
+                                  padding: EdgeInsets.zero,
+                                  scrollDirection: Axis.vertical,
+                                  itemCount: data!.articles!.length,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    return dashboardState.verticalllistitem(size,
+                                        data.articles![index].title!,
+                                        data.articles![index].urlToImage,
+                                        data.articles![index].publishedAt!.split("T")[0],
+                                        data.articles![index].source!.name!
+                                    );
+                                  }
+                              ),
+                            ),
+
+                          ],
+                        );
+                      }else{
+                        return Center(child: Text("No Data"),);
+                      }
+                  }
+                }),
+
+
+
           ],
         ),
       ),

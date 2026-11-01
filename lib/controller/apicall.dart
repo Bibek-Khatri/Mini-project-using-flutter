@@ -1,44 +1,39 @@
 import 'dart:convert' as convert;
 
+import 'package:miniflutterproject/core/static.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import '../core/static.dart';
-import '../model/News.dart';
+
+import '../model/news.dart';
+
 class Apicall {
+  static Future<news?>? getnewsapidata() async {
+    try {
+      var url = Uri.https(Static.baseurl, Static.path, {
+        'q': 'apple',
+        'sortBy': 'popularity',
+        'apiKey': Static.apikey,
+      });
 
-  // ?q=tesla&from=2026-09-15
-  // &sortBy=publishedAt
-  // &apiKey=55c38aa5e5b34e72895908bfe55f6342
-
-   static Future<news?>?getnewsapidata(dynamic reponse)async{
-    try{
-      var url = Uri.http(Static.baseurl, Static.path,{
-
-          'q':'apple',
-            'sortBy': 'popularity',
-            'apikey': Static.apikey
-          }
-      );
       var response = await http.get(url);
-      if (kDebugMode){
+
+      if (kDebugMode) {
         print(response.body);
       }
 
-      if(response.statusCode.toString().contains("20")) {
-        var jsonresponse = convert.jsonDecode(reponse.body);
-        var data = news.fromJson(jsonresponse);
+      if (response.statusCode >= 200 &&
+          response.statusCode < 300) {
+        var jsonResponse = convert.jsonDecode(response.body);
+        var data = news.fromJson(jsonResponse);
         return data;
-      }
-      else{
+      } else {
         return null;
       }
-
-    }catch(e){
-      if (kDebugMode){
+    } catch (e) {
+      if (kDebugMode) {
         print(e);
       }
+      return null;
     }
-
   }
 }
-
