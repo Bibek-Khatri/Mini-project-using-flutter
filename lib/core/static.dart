@@ -1,15 +1,44 @@
-import '../model/news.dart';
+import 'package:miniflutterproject/model/news.dart';
+import 'package:smart_date_formatter/smart_date_formatter.dart';
+
 class Static {
-  //all static data
+  //static datas
   //https://newsapi.org/
   // v2/everything
-  // ?q=tesla&from=2026-09-15
-  // &sortBy=publishedAt
-  // &apiKey=55c38aa5e5b34e72895908bfe55f6342
-  static String baseurl="newsapi.org";
-  static String path ="v2/everything";
-  static String apikey ="55c38aa5e5b34e72895908bfe55f6342";
+  // ?q=apple
+  // &sortBy=popularity
+  // &apiKey=a25a0c0b883c4f389ff5c23da0f9dfea
+  static String baseurl = "newsapi.org";
+  static String path = "v2/everything";
+  static String apikey = "a25a0c0b883c4f389ff5c23da0f9dfea";
+
+
 
   static Articles? article;
+
+  //datetime formatter
+  static datetimeconverter(String value){
+
+    if(value.isEmpty || value == "" || value == " "){
+      return "";
+    }
+    try{
+      // datetime format // parse //return string
+
+      DateTime formatt = DateTime.parse(value);
+      var formatedateToday = formatt.format('dd-MM-yyyy');
+      var formatedate = formatt.toReadable;
+      return formatedateToday.toString();
+      return formatedate.toString();
+    }catch(e){
+      return "";
+    }
+
+
+
+
+
+
+  }
 
 }

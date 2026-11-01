@@ -2,6 +2,7 @@ import 'package:miniflutterproject/controller/apicall.dart';
 import 'package:miniflutterproject/model/news.dart';
 import 'package:miniflutterproject/pages/detailpage.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_date_formatter/smart_date_formatter.dart';
 
 import '../core/static.dart';
 
@@ -15,6 +16,8 @@ class dashboard extends StatefulWidget {
 class dashboardState extends State<dashboard> {
 
   horizontalitem(size, String title, url, date, Articles articledata){
+    var formateddata= Static.datetimeconverter(date);
+    date= formateddata;
     return GestureDetector(
       onTap: (){
         Static.article=articledata;
@@ -76,6 +79,9 @@ class dashboardState extends State<dashboard> {
   }
 
   static verticalllistitem( context,size,String title, url,date,source, Articles? articledata){
+
+    var formateddata= Static.datetimeconverter(date);
+    date= formateddata;
     return  GestureDetector(
       onTap: (){
         Static.article=articledata;

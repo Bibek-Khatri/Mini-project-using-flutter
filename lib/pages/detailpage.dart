@@ -3,6 +3,7 @@ import '../controller/apicall.dart';
 import '../model/news.dart';
 import 'dashboard.dart';
 import '../core/static.dart';
+import 'package:smart_date_formatter/smart_date_formatter.dart';
 class detailpage extends StatefulWidget {
   detailpage({super.key});
 
