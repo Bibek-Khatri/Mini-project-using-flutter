@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../controller/apicall.dart';
 import '../model/news.dart';
 import 'dashboard.dart';
-
+import '../core/static.dart';
 class detailpage extends StatefulWidget {
   detailpage({super.key});
 
@@ -34,7 +34,7 @@ class detailpageState extends State<detailpage> {
                   height: size.height/4,
                   width: size.width,
                   child: Image.network(fit: BoxFit.cover
-                      ,"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjZEcP2NkJQgEzAbBaG49jkD5TOG9hI9VALB1a_-vXlQ&s=10"),
+                      ,Static.article!.urlToImage!),
                 ),
                 Container(
                   height: size.height/4,
@@ -72,7 +72,7 @@ class detailpageState extends State<detailpage> {
             SizedBox(height: 15,),
             Padding(
               padding: const EdgeInsets.all(15.0),
-              child: Text("Happy Dashain Everyone".toUpperCase(),
+              child: Text(Static.article!.title!.toUpperCase(),
                 style: TextStyle(fontSize: 20),maxLines: 2,),
             ),
             Padding(
@@ -80,17 +80,13 @@ class detailpageState extends State<detailpage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Author Name"),
-                  Text("02 02 2026")
+                  Text(Static.article!.author!),
+                  Text(Static.article!.publishedAt!)
                 ],),
             ),
             Padding(
               padding: const EdgeInsets.all(15.0),
-              child: Text("Happy Dashain, Happy Dashain, Happy Dashain,"
-                  "Happy Dashain,"
-                  "Happy Dashain, Happy Dashain, Happy Dashain, Happy Dashain,"
-                  "Happy Dashain,"
-                  "Happy Dashain,"),
+              child: Text(Static.article!.description!),
             ),
             Padding(
               padding: const EdgeInsets.only(left: 15.0,right: 15),
@@ -123,11 +119,12 @@ class detailpageState extends State<detailpage> {
                                   scrollDirection: Axis.vertical,
                                   itemCount: data!.articles!.length,
                                   itemBuilder: (BuildContext context, int index) {
-                                    return dashboardState.verticalllistitem(size,
+                                    return dashboardState.verticalllistitem(context, size,
                                         data.articles![index].title!,
                                         data.articles![index].urlToImage,
                                         data.articles![index].publishedAt!.split("T")[0],
-                                        data.articles![index].source!.name!
+                                        data.articles![index].source!.name!,
+                                        data.articles![index]
                                     );
                                   }
                               ),

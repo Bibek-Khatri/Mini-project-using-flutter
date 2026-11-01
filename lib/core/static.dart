@@ -1,3 +1,4 @@
+import '../model/news.dart';
 class Static {
   //all static data
   //https://newsapi.org/
@@ -8,5 +9,7 @@ class Static {
   static String baseurl="newsapi.org";
   static String path ="v2/everything";
   static String apikey ="55c38aa5e5b34e72895908bfe55f6342";
+
+  static Articles? article;
 
 }
