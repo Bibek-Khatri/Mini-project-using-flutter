@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:miniflutterproject/pages/dashboard.dart';
 import 'package:miniflutterproject/pages/login.dart';
 
-void main() {
+Future <void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
