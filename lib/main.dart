@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:miniflutterproject/pages/dashboard.dart';
+import 'package:miniflutterproject/pages/login.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
 
         colorScheme: .fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const dashboard()
+      home: const loginPage()
     );
   }
 }

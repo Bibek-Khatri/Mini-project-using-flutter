@@ -5,6 +5,7 @@ import 'dashboard.dart';
 import '../core/static.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:smart_date_formatter/smart_date_formatter.dart';
+
 class detailpage extends StatefulWidget {
   detailpage({super.key});
 
@@ -15,12 +16,12 @@ class detailpage extends StatefulWidget {
 class detailpageState extends State<detailpage> {
 
   Future<news?>? futurenewsdata;
+
   @override
   void initState() {
     super.initState();
     futurenewsdata = Apicall.getnewsapidata();
   }
-
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -36,7 +37,7 @@ class detailpageState extends State<detailpage> {
                   height: size.height/4,
                   width: size.width,
                   child: Image.network(fit: BoxFit.cover
-                      ,Static.article!.urlToImage!),
+                      , Static.article!.urlToImage!),
                 ),
                 Container(
                   height: size.height/4,
@@ -58,8 +59,9 @@ class detailpageState extends State<detailpage> {
                   child: GestureDetector(
                     onTap: (){
                       SharePlus.instance.share(
-                          ShareParams(text: 'check out my website https://example.com')
-                      );
+                          ShareParams(text: Static.article!.title!
+                              +  " " +
+                              Static.article!.url!));
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(15.0),
@@ -90,7 +92,7 @@ class detailpageState extends State<detailpage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(Static.article!.author!),
-                  Text(Static.article!.publishedAt!)
+                  Text(Static.datetimeconverter(Static.article!.publishedAt!))
                 ],),
             ),
             Padding(
@@ -105,7 +107,6 @@ class detailpageState extends State<detailpage> {
               padding: const EdgeInsets.all(15.0),
               child: Text("Related Videos", style: TextStyle(fontSize: 18),),
             ),
-
             FutureBuilder(
                 future: futurenewsdata,
                 builder: (context, AsyncSnapshot<news?> snapshot){
@@ -122,13 +123,14 @@ class detailpageState extends State<detailpage> {
                           children: [
 
                             Container(
-                              height: size.height/1.65,
+                              height: size.height/1.6,
                               child: ListView.builder(
                                   padding: EdgeInsets.zero,
                                   scrollDirection: Axis.vertical,
                                   itemCount: data!.articles!.length,
                                   itemBuilder: (BuildContext context, int index) {
-                                    return dashboardState.verticalllistitem(context, size,
+                                    return dashboardState.verticalllistitem(
+                                        context,size,
                                         data.articles![index].title!,
                                         data.articles![index].urlToImage,
                                         data.articles![index].publishedAt!.split("T")[0],

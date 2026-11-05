@@ -15,12 +15,14 @@ class dashboard extends StatefulWidget {
 
 class dashboardState extends State<dashboard> {
 
-  horizontalitem(size, String title, url, date, Articles articledata){
-    var formateddata= Static.datetimeconverter(date);
-    date= formateddata;
+  horizontalitem(size, String title, url, date,Articles art){
+    var formatteddate = Static.datetimeconverter(date);
+    date = formatteddate;
     return GestureDetector(
       onTap: (){
-        Static.article=articledata;
+        //katai save garnu paryo
+        Static.article = art;
+        //route
         Navigator.of(context).push(
           MaterialPageRoute<void>(
             builder: (context) => detailpage(),
@@ -77,20 +79,19 @@ class dashboardState extends State<dashboard> {
       ),
     );
   }
-
-  static verticalllistitem( context,size,String title, url,date,source, Articles? articledata){
-
-    var formateddata= Static.datetimeconverter(date);
-    date= formateddata;
+  static verticalllistitem(context,size,String title, url,date,source, Articles? art){
+    var formatteddate = Static.datetimeconverter(date);
+    date = formatteddate;
     return  GestureDetector(
       onTap: (){
-        Static.article=articledata;
+        //katai save garnu paryo
+        Static.article = art;
+        //route
         Navigator.of(context).push(
           MaterialPageRoute<void>(
             builder: (context) => detailpage(),
           ),
         );
-
       },
       child: Container(
         margin: EdgeInsets.all(15),
@@ -199,18 +200,20 @@ class dashboardState extends State<dashboard> {
                                         data.articles![index].title!,
                                         data.articles![index].urlToImage,
                                         data.articles![index].publishedAt,
-                                        data.articles![index]);
+                                        data.articles![index]
+                                    );
                                   }
                               ),
                             ),
                             Container(
-                              height: size.height/1.65,
+                              height: size.height/1.6,
                               child: ListView.builder(
                                   padding: EdgeInsets.zero,
                                   scrollDirection: Axis.vertical,
                                   itemCount: data.articles!.length,
                                   itemBuilder: (BuildContext context, int index) {
-                                    return verticalllistitem(context, size,
+                                    return verticalllistitem(
+                                        context,size,
                                         data.articles![index].title!,
                                         data.articles![index].urlToImage,
                                         data.articles![index].publishedAt!.split("T")[0],

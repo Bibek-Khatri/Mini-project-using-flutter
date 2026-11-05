@@ -1,0 +1,115 @@
+mutation CreateUser @auth(level: USER) {
+  user_insert(data: {id_expr: "auth.uid", username: "new_user", email: "user@example.com"})
+}
+
+mutation UpdateUser($data: User_Data!) @auth(level: USER) {
+  user_update(key: {id_expr: "auth.uid"}, data: $data)
+}
+
+mutation DeleteUser @auth(level: USER) {
+  user_delete(key: {id_expr: "auth.uid"})
+}
+
+query GetUser @auth(level: USER) {
+  user(key: {id_expr: "auth.uid"}) {
+    username
+    email
+  }
+}
+
+query ListUsers @auth(level: PUBLIC, insecureReason: "Public user directory") {
+  users {
+    username
+  }
+}
+
+mutation CreateChat @auth(level: USER) {
+  chat_insert(data: {type: "private", createdAt_expr: "request.time", name: "New Chat"})
+}
+
+mutation UpdateChat($id: UUID!, $data: Chat_Data!) @auth(level: USER) {
+  chat_update(key: {id: $id}, data: $data)
+}
+
+mutation DeleteChat($id: UUID!) @auth(level: USER) {
+  chat_delete(key: {id: $id})
+}
+
+query GetChat($id: UUID!) @auth(level: USER) {
+  chat(id: $id) {
+    name
+    type
+  }
+}
+
+query ListChats @auth(level: USER) {
+  chats {
+    name
+  }
+}
+
+mutation CreateMessage($chatId: UUID!, $content: String!) @auth(level: USER) {
+  message_insert(data: {
+    chatId: $chatId,
+    authorId_expr: "auth.uid",
+    content: $content,
+    sentAt_expr: "request.time"
+  })
+}
+
+mutation UpdateMessage($id: UUID!, $content: String!) @auth(level: USER) {
+  message_update(key: {id: $id}, data: {content: $content})
+}
+
+mutation DeleteMessage($id: UUID!) @auth(level: USER) {
+  message_delete(key: {id: $id})
+}
+
+query GetMessage($id: UUID!) @auth(level: USER) {
+  message(id: $id) {
+    content
+    author { username }
+  }
+}
+
+query ListMessages($chatId: UUID!) @auth(level: USER) {
+  messages(where: {chatId: {eq: $chatId}}) {
+    content
+  }
+}
+
+mutation JoinChat($chatId: UUID!) @auth(level: USER) {
+  chatParticipant_insert(data: {
+    chatId: $chatId,
+    userId_expr: "auth.uid",
+    joinedAt_expr: "request.time"
+  })
+}
+
+mutation LeaveChat($id: UUID!) @auth(level: USER) {
+  chatParticipant_delete(key: {id: $id})
+}
+
+query ListParticipants($chatId: UUID!) @auth(level: USER) {
+  chatParticipants(where: {chatId: {eq: $chatId}}) {
+    user { username }
+  }
+}
+
+mutation CreateContact($contactPersonId: UUID!) @auth(level: USER) {
+  contact_insert(data: {
+    ownerId_expr: "auth.uid",
+    contactPersonId: $contactPersonId,
+    status: "active"
+  })
+}
+
+mutation DeleteContact($id: UUID!) @auth(level: USER) {
+  contact_delete(key: {id: $id})
+}
+
+query ListContacts @auth(level: USER) {
+  contacts(where: {ownerId: {eq_expr: "auth.uid"}}) {
+    contactPerson { username }
+  }
+}

@@ -1,0 +1,31 @@
+type User @table {
+  username: String!
+  email: String!
+  avatarUrl: String
+  bio: String
+}
+
+type Chat @table {
+  type: String!
+  createdAt: Timestamp!
+  name: String
+}
+
+type Message @table {
+  content: String!
+  sentAt: Timestamp!
+  author: User!
+  chat: Chat!
+}
+
+type ChatParticipant @table {
+  joinedAt: Timestamp!
+  user: User!
+  chat: Chat!
+}
+
+type Contact @table {
+  status: String!
+  owner: User!
+  contactPerson: User!
+}
