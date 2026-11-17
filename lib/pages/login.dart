@@ -100,6 +100,9 @@ class _loginPageState extends State<loginPage> {
             ),
             GestureDetector(
               onTap:(){
+                //check firebase with email and password
+                // if yes route to dashboard
+                // of mp show error message
                 Navigator.of(context).push(
                   MaterialPageRoute<void>(
                     builder: (context) => dashboard()

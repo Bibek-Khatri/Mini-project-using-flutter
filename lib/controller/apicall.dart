@@ -1,38 +1,30 @@
-import 'dart:convert' as convert;
-
 import 'package:miniflutterproject/core/static.dart';
+import 'package:miniflutterproject/model/news.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-
-import '../model/news.dart';
+import 'dart:convert' as convert;
 
 class Apicall {
-  static Future<news?>? getnewsapidata() async {
-    try {
-      var url = Uri.https(Static.baseurl, Static.path, {
-        'q': 'apple',
-        'sortBy': 'popularity',
-        'apiKey': Static.apikey,
-      });
-
+// ?q=apple
+// &sortBy=popularity
+  static Future<news?>? getnewsdata() async{
+    try{
+      var url = Uri.https(
+        StaticFile.baseurl, StaticFile.path,
+        {"q": "apple",
+          "sortBy": "popularity",
+          "apiKey": StaticFile.apikey,},
+      );
       var response = await http.get(url);
-
-      if (kDebugMode) {
-        print(response.body);
-      }
-
-      if (response.statusCode >= 200 &&
-          response.statusCode < 300) {
-        var jsonResponse = convert.jsonDecode(response.body);
-        var data = news.fromJson(jsonResponse);
+      if(response.statusCode.toString().contains("20")){
+        var responsedata = convert.jsonDecode(response.body);
+        var data = news.fromJson(responsedata);
         return data;
-      } else {
+      }else{
         return null;
       }
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
+    }
+    catch(e){
       return null;
     }
   }

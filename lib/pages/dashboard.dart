@@ -1,13 +1,11 @@
 import 'package:miniflutterproject/controller/apicall.dart';
+import 'package:miniflutterproject/core/static.dart';
 import 'package:miniflutterproject/model/news.dart';
 import 'package:miniflutterproject/pages/detailpage.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_date_formatter/smart_date_formatter.dart';
-
-import '../core/static.dart';
 
 class dashboard extends StatefulWidget {
-  const dashboard({super.key});
+  dashboard({super.key});
 
   @override
   State<dashboard> createState() => dashboardState();
@@ -15,13 +13,13 @@ class dashboard extends StatefulWidget {
 
 class dashboardState extends State<dashboard> {
 
-  horizontalitem(size, String title, url, date,Articles art){
-    var formatteddate = Static.datetimeconverter(date);
-    date = formatteddate;
+  horizontallistcard(size, String title, url, date ,Articles art ){
+    var formatted = StaticFile.dateconverter(date);
+    date = formatted;
     return GestureDetector(
       onTap: (){
-        //katai save garnu paryo
-        Static.article = art;
+        //store in static variable
+        StaticFile.article = art;
         //route
         Navigator.of(context).push(
           MaterialPageRoute<void>(
@@ -29,63 +27,74 @@ class dashboardState extends State<dashboard> {
           ),
         );
       },
-
-
       child: Stack(
         children: [
-
           Container(
-            margin: EdgeInsets.only(left: 10,right: 10,top: 8),
+            margin: EdgeInsets.all(15),
             height: size.height/4.5,
+            width: size.width/1.2,
             decoration: BoxDecoration(
-              color: Colors.grey,
+              color: Colors.black,
               borderRadius: BorderRadius.circular(20),
-            ),
-            width: size.width/1.3,
 
+            ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: Image.network(url,
-                fit: BoxFit.cover,
-              ),
+              child: Image.network( url
+                ,fit: BoxFit.cover,),
             ),
           ),
           Container(
-            margin: EdgeInsets.only(left: 10,right: 10,top: 8),
+            margin: EdgeInsets.all(15),
             height: size.height/4.5,
-            width: size.width/1.3,
+            width: size.width/1.2,
             decoration: BoxDecoration(
-              color: Colors.black26,
+              color: Colors.black38,
               borderRadius: BorderRadius.circular(20),
+
             ),
           ),
-          Positioned( bottom: 40,left: 30,
-              child: Container(width: size.width/2,
-                  child: Text(title,
-                    overflow: TextOverflow.ellipsis,maxLines: 2,
-                    style: TextStyle(color: Colors.white),)
-              )),
-          Positioned( bottom: 20,left: 30,
-              child: Container(width: size.width/2,
-                  child: Text(date,
-                    overflow: TextOverflow.ellipsis,maxLines: 1,
-                    style: TextStyle(color: Colors.white),)
-              )),
-          Positioned( bottom: 20,right: 30,
-              child: Container(
-                  child: Icon(Icons.play_circle,color: Colors.white,size: 30,)
-              ))
+          Positioned(
+            bottom: 45,
+            left: 30,
+            child: Container(
+              width: size.width/2,
+              child: Text(title,
+                style: TextStyle(color: Colors.white,fontSize: 14),
+                maxLines: 2,overflow: TextOverflow.ellipsis,),
+            ),
+          ),
+          Positioned(
+            bottom: 25,
+            left: 30,
+            child: Container(
+              width: size.width/2,
+              child: Text(date,
+                style: TextStyle(color: Colors.white,fontSize: 14),
+                maxLines: 1,overflow: TextOverflow.ellipsis,),
+            ),
+          ),
+          Positioned(
+            bottom: 25,
+            right: 30,
+            child: Icon(Icons.play_circle_fill,
+              color: Colors.white,
+              size: 40,
+            ),
+          )
         ],
       ),
     );
   }
-  static verticalllistitem(context,size,String title, url,date,source, Articles? art){
-    var formatteddate = Static.datetimeconverter(date);
-    date = formatteddate;
+
+  static verticallistcard(context,size, title, url, date, source,
+      Articles art){
+    var formatted = StaticFile.dateconverter(date);
+    date = formatted;
     return  GestureDetector(
       onTap: (){
-        //katai save garnu paryo
-        Static.article = art;
+        //store in static variable
+        StaticFile.article = art;
         //route
         Navigator.of(context).push(
           MaterialPageRoute<void>(
@@ -93,67 +102,67 @@ class dashboardState extends State<dashboard> {
           ),
         );
       },
-      child: Container(
-        margin: EdgeInsets.all(15),
-        child: Row(
-          children: [
-            Stack(
+      child: Row(
+        children: [
+          Column(
+            children: [
+              Stack(
+                children: [
+                  Container(
+                    margin: EdgeInsets.all(10),
+                    height: 100,
+                    width: 100,
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
+                    child: ClipRRect(borderRadius: BorderRadius.circular(20)
+                        ,child: Image.network(url
+                          ,fit: BoxFit.cover,)),
+                  ),
+                  Positioned(
+                    top: 40,
+                    left: 40,
+                    child: Icon(Icons.play_circle_fill,
+                      color: Colors.white,size: 40,),
+                  )
+                ],
+              )
+            ],
+          ),
+          Container(
+            height: size.height/10,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  height: 150,
-                  width: 150,
-                  decoration: BoxDecoration(
-                    color: Colors.grey,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.network(
-                        fit: BoxFit.cover,
-                        url),
-                  ),
-                ),
+                    width: size.width/1.6,
+                    child: Text(title,
+                      maxLines: 2,overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),)),
+
                 Container(
-                  height: 150,
-                  width: 150,
-                  child: Center(
-                    child: Icon(Icons.play_circle_fill_rounded,size: 50,
-                      color: Colors.white,),
-                  ),
-                )
-              ],
-            ),
-            Column(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(left: 15),
-                  width: size.width/2,
-                  child: Text(title, maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16),),
-                ),
-                Container(
-                  margin: EdgeInsets.all(15),
-                  width: size.width/2.1,
+                  width: size.width/1.6,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        padding: EdgeInsets.only(left: 15,
-                            right: 15,top: 10,bottom: 10),
                         decoration: BoxDecoration(
-                            color:Colors.red ),
-                        child: Text(source,style: TextStyle(color: Colors.white),),
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        padding: EdgeInsets.all(3),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 15.0,right: 15,top: 8,bottom: 8),
+                          child: Text(source,style: TextStyle(color: Colors.white),),
+                        ),
                       ),
-                      Text(date,style: TextStyle(color: Colors.black),),
+                      Text(date.split(",")[1],),
+
                     ],
                   ),
                 )
               ],
-            )
-
-          ],
-        ),
+            ),
+          )
+        ],
       ),
     );
   }
@@ -161,84 +170,80 @@ class dashboardState extends State<dashboard> {
   Future<news?>? futurenewsdata;
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
-    futurenewsdata = Apicall.getnewsapidata();
+    futurenewsdata = Apicall.getnewsdata();
   }
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Dashboard"),
-        centerTitle: true,
-      ),
-      body: Container(
-        child: Column(
-          children: [
-            FutureBuilder(
-                future: futurenewsdata,
-                builder: (context, AsyncSnapshot<news?> snapshot){
-                  switch (snapshot.connectionState){
-                    case ConnectionState.none:
-                    case ConnectionState.waiting:
-                      return Center(child: CircularProgressIndicator(),);
-                    case ConnectionState.active:
-                    case ConnectionState.done:
-                      if(snapshot.hasData){
-                        //ui
-                        var data = snapshot.data;
-                        return Column(
-                          children: [
-                            Container(
-                              height: size.height/4.5,
-                              child: ListView.builder(
-                                  padding: EdgeInsets.zero,
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: data!.articles!.length,
-                                  itemBuilder: (BuildContext context, int index) {
-                                    return horizontalitem(size,
-                                        data.articles![index].title!,
-                                        data.articles![index].urlToImage,
-                                        data.articles![index].publishedAt,
-                                        data.articles![index]
-                                    );
-                                  }
-                              ),
+      appBar: AppBar(),
+      body: Column(
+        children: [
+          FutureBuilder(
+              future: futurenewsdata,
+              builder: (context, AsyncSnapshot<news?> snapshot)
+              {
+                switch (snapshot.connectionState){
+                  case ConnectionState.none:
+                  case ConnectionState.waiting:
+                    return Center(child: CircularProgressIndicator());
+                  case ConnectionState.active:
+                  case ConnectionState.done:
+                    if(snapshot.hasData){
+                      //show ui
+                      var data = snapshot.data;
+                      return Column(
+                        children: [
+                          Container(
+                            height: size.height/4,
+                            child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                padding: EdgeInsets.zero,
+                                itemCount: data!.articles!.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return  horizontallistcard(
+                                      size,
+                                      data.articles![index].title!,
+                                      data.articles![index].urlToImage,
+                                      data.articles![index].publishedAt,
+                                      data.articles![index]
+                                  );
+                                }
                             ),
-                            Container(
-                              height: size.height/1.6,
-                              child: ListView.builder(
-                                  padding: EdgeInsets.zero,
-                                  scrollDirection: Axis.vertical,
-                                  itemCount: data.articles!.length,
-                                  itemBuilder: (BuildContext context, int index) {
-                                    return verticalllistitem(
-                                        context,size,
-                                        data.articles![index].title!,
-                                        data.articles![index].urlToImage,
-                                        data.articles![index].publishedAt!.split("T")[0],
-                                        data.articles![index].source!.name!,
-                                        data.articles![index]
-                                    );
-                                  }
-                              ),
+                          ),
+                          //vertical list
+                          Container(
+                            height: size.height/1.75,
+                            child: ListView.builder(
+                                scrollDirection: Axis.vertical,
+                                padding: EdgeInsets.zero,
+                                itemCount: data.articles!.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return  verticallistcard(
+                                      context,
+                                      size,
+                                      data.articles![index].title!,
+                                      data.articles![index].urlToImage,
+                                      data.articles![index].publishedAt!.split("T")[0],
+                                      data.articles![index].source!.name!.toString(),
+                                      data.articles![index]
+                                  );
+                                }
                             ),
-
-                          ],
-                        );
-                      }else{
-                        return Center(child: Text("No Data"),);
-                      }
-                  }
-                }),
-
-
-
+                          ),
+                        ],
+                      );
+                    }else{
+                      return Center(child:
+                      Text("No Data Available"),);
+                    }
+                }
+              }),
 
 
-
-          ],
-        ),
+        ],
       ),
     );
   }
