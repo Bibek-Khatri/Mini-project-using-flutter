@@ -1,13 +1,63 @@
 import 'package:miniflutterproject/pages/dashboard.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:miniflutterproject/pages/dashboard.dart';
 
 class loginPage extends StatefulWidget {
   const loginPage({super.key});
   @override
   State<loginPage> createState() => _loginPageState();
 }
+
 class _loginPageState extends State<loginPage> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _auth.authStateChanges().listen((User? user) {
+      if (user != null && mounted) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute<void>(builder: (context) => dashboard()),
+        );
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _signInWithEmailAndPassword() async {
+    setState(() => _isLoading = true);
+    try {
+      final UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+      if (mounted && userCredential.user != null) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute<void>(builder: (context) => dashboard()),
+        );
+        _emailController.clear();
+        _passwordController.clear();
+      }
+    } on FirebaseAuthException catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.message ?? 'Sign in failed')),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -59,10 +109,11 @@ class _loginPageState extends State<loginPage> {
                     width: size.width/1.8,
                     child: TextField(
 
-                      decoration: InputDecoration(
-                          hint: Text("abc@gmail.com"),
-                          border: InputBorder.none
-                      ),
+                    decoration: InputDecoration(
+                        hintText: "abc@gmail.com",
+                        border: InputBorder.none
+                    ),
+                    controller: _emailController,
                     ),
                   )
                 ],
@@ -83,10 +134,11 @@ class _loginPageState extends State<loginPage> {
                     width: size.width/1.8,
                     child: TextField(
                       obscureText: true,
-                      decoration: InputDecoration(
-                          hint: Text("keep it a secret"),
-                          border: InputBorder.none
-                      ),
+                    decoration: InputDecoration(
+                        hintText: "keep it a secret",
+                        border: InputBorder.none
+                    ),
+                    controller: _passwordController,
                     ),
                   ),
 
@@ -94,13 +146,7 @@ class _loginPageState extends State<loginPage> {
               ),
             ),
             GestureDetector(
-              onTap: (){
-                Navigator.of(context).push(
-                  MaterialPageRoute<void>(
-                    builder: (context) => dashboard(),
-                  ),
-                );
-              },
+              onTap: _signInWithEmailAndPassword,
               child: Container(
                 margin: EdgeInsets.all(10),
                 padding: EdgeInsets.only(
@@ -108,13 +154,22 @@ class _loginPageState extends State<loginPage> {
                     top: 12,bottom: 12
                 ),
                 decoration: BoxDecoration(
-                    color: Colors.blue,
+                    color: _isLoading ? Colors.blue.shade300 : Colors.blue,
                     borderRadius: BorderRadius.circular(20)
                 ),
-                child: Text("Login".toUpperCase(),
-                  style: TextStyle(color: Colors.white,
-                      fontSize: 14,fontWeight: FontWeight.bold),
-                ),
+                child: _isLoading
+                    ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
+                      )
+                    : Text("Login".toUpperCase(),
+                      style: TextStyle(color: Colors.white,
+                          fontSize: 14,fontWeight: FontWeight.bold),
+                    ),
               ),
             ),
 
